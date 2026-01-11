@@ -1,5 +1,33 @@
+use std::ffi::{CStr, CString, c_char};
+use std::ptr;
+
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 //include!("../bindings.rs");
+
+pub fn morpheus_check(input: &str) -> Option<String> {
+    let input_c_string = CString::new(input).unwrap();
+    let input_ptr = input_c_string.into_raw();
+    let flags = 0;
+    let morph_lib_path = ptr::null_mut();
+
+    let result_owned_string;
+    unsafe {
+        let result_ptr: *mut c_char = philolog_morph(input_ptr, flags, morph_lib_path);
+        if result_ptr.is_null() {
+            return None;
+        }
+        let result_c_str = CStr::from_ptr(result_ptr);
+
+        if let Ok(res_str) = result_c_str.to_str() {
+            result_owned_string = res_str.to_owned();
+            libc::free(result_ptr as *mut libc::c_void);
+        } else {
+            libc::free(result_ptr as *mut libc::c_void);
+            return None;
+        }
+    }
+    Some(result_owned_string)
+}
 
 #[cfg(test)]
 mod tests {
@@ -7,7 +35,6 @@ mod tests {
 
     #[test]
     fn hello_morpheus() {
-        use std::ffi::CString;
         let my_string = "λόγος";
         let c_string = CString::new(my_string).unwrap();
         let ptr = c_string.into_raw();
@@ -21,28 +48,44 @@ mod tests {
 
     #[test]
     fn check_word() {
-        use std::ffi::{CStr, CString, c_char};
-        use std::ptr;
         let my_string = "fe/rw";
-        let c_string = CString::new(my_string).unwrap();
-        let ptr = c_string.into_raw();
-        //let mut null_ptr: *mut c_char = ptr::null();
-        unsafe {
-            let raw_ptr: *mut c_char = philolog_morph(ptr, 0, ptr::null_mut());
-            assert!(!raw_ptr.is_null());
-            let c_str = CStr::from_ptr(raw_ptr);
+        let res = morpheus_check(my_string);
 
-            let owned_string = c_str.to_str().unwrap().to_owned();
-
-            assert_eq!(
-                owned_string,
-                String::from(
-                    "<word>\n<form xml:lang=\"grc-x-beta\">fe/rw</form>\n<entry>\n<dict>\n<hdwd xml:lang=\"grc-x-beta\">fe/rw</hdwd>\n<pofs order=\"1\">verb</pofs>\n</dict>\n<infl>\n<term xml:lang=\"grc-x-beta\"><stem>fer</stem><suff>w</suff></term>\n<pofs order=\"1\">verb</pofs>\n<mood>subjunctive</mood>\n<num>singular</num>\n<pers>1st</pers>\n<tense>present</tense>\n<voice>active</voice>\n<stemtype>w_stem</stemtype>\n</infl>\n<infl>\n<term xml:lang=\"grc-x-beta\"><stem>fer</stem><suff>w</suff></term>\n<pofs order=\"1\">verb</pofs>\n<mood>indicative</mood>\n<num>singular</num>\n<pers>1st</pers>\n<tense>present</tense>\n<voice>active</voice>\n<stemtype>w_stem</stemtype>\n</infl>\n</entry>\n</word>\n</words>\n"
-                )
-            );
-            //free_cstring_in_c(raw_ptr as *mut c_void);
-            // After calling, retake ownership of the pointer and deallocate it
-            let _ = CString::from_raw(ptr);
-        }
+        assert_eq!(
+            res.unwrap(),
+            String::from(
+                r##"<word>
+<form xml:lang="grc-x-beta">fe/rw</form>
+<entry>
+<dict>
+<hdwd xml:lang="grc-x-beta">fe/rw</hdwd>
+<pofs order="1">verb</pofs>
+</dict>
+<infl>
+<term xml:lang="grc-x-beta"><stem>fer</stem><suff>w</suff></term>
+<pofs order="1">verb</pofs>
+<mood>subjunctive</mood>
+<num>singular</num>
+<pers>1st</pers>
+<tense>present</tense>
+<voice>active</voice>
+<stemtype>w_stem</stemtype>
+</infl>
+<infl>
+<term xml:lang="grc-x-beta"><stem>fer</stem><suff>w</suff></term>
+<pofs order="1">verb</pofs>
+<mood>indicative</mood>
+<num>singular</num>
+<pers>1st</pers>
+<tense>present</tense>
+<voice>active</voice>
+<stemtype>w_stem</stemtype>
+</infl>
+</entry>
+</word>
+</words>
+"##
+            )
+        );
     }
 }
