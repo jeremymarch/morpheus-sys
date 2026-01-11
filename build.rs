@@ -41,7 +41,7 @@ fn main() {
     //     .status()
     //     .expect("Failed to run make command");
     let status = Command::new("./build_mac.sh")
-        .current_dir(&vendor_dir) // Change to the directory containing the Makefile
+        .current_dir(vendor_dir) // Change to the directory containing the Makefile
         //.arg("all") // Or whatever target you need
         //.env("OUT_DIR", &out_dir) // Pass OUT_DIR to the Makefile if needed
         .status()
