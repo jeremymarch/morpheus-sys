@@ -10,7 +10,7 @@ to your Cargo.toml file.
 
 You will also want to copy the Morpheus stem library to a location accessible to your program.  
 
-Call `morpheus_check("FE/RW", Some("path/to/morpheus/stemlib"))` to analyze the betacode encoded data in the first parameter.  It will return an Option<String> with the result.  You can also leave the second parameter as None and specify the path to the Morpheus stem library using the `MORPHLIB` environment variable.
+Call `morpheus_check("FE/RW", Some("path/to/morpheus/stemlib"))` to analyze the betacode encoded data in the first parameter.  It will return the result as an Option&lt;String&gt;.  Alternatively, you can set the second parameter to None and specify the path to the Morpheus stem library using the `MORPHLIB` environment variable.
 
 See the .github workflow for details on how to test and build this crate.  Currently, it has been tested on Linux and MacOS.  For usage, check the unit tests in src/lib.rs.
 
