@@ -1,6 +1,6 @@
 // build.rs
 use std::env;
-use std::fs;
+//use std::fs;
 use std::path::Path;
 //use std::path::PathBuf;
 use std::process::Command;
@@ -69,10 +69,10 @@ fn main() {
     }
 
     //requires the lib prefix to link properly
-    fs::copy(full_path.join("anal.a"), full_path.join("libanal.a")).unwrap();
+    //fs::copy(full_path.join("anal.a"), full_path.join("libanal.a")).unwrap();
 
     println!("cargo:rustc-link-search=native={}", full_path.display());
-    println!("cargo:rustc-link-lib=static=anal"); // Link against the 'foo' library
+    println!("cargo:rustc-link-lib=static=philolog"); // Link against the 'foo' library
 
     // Tell Cargo where to find the library and how to link it
     // The name "cpfapack" should match the library name after "lib" (e.g., libcpfapack.a)

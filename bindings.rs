@@ -3,3 +3,10 @@
 unsafe extern "C" {
     pub fn get_philolog(word: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
+unsafe extern "C" {
+    pub fn philolog_morph(
+        line: *mut ::std::os::raw::c_char,
+        lang: ::std::os::raw::c_int,
+        lib_path: *mut ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+}
