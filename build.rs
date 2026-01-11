@@ -9,7 +9,7 @@ fn main() {
     // Get the Cargo-provided output directory
     let out_dir = env::var("OUT_DIR").unwrap();
     let out_path = Path::new(&out_dir);
-    let vendor_dir = Path::new("../morpheus");
+    let vendor_dir = Path::new("morpheus");
 
     if Path::new(vendor_dir).is_dir() {
         println!("The directory exists.");
@@ -54,24 +54,25 @@ fn main() {
     // Tell Cargo which libraries to link and where to find them
     // This assumes your Makefile outputs a library file like 'libfoo.a' into OUT_DIR
     //println!("Looking for library files in {:?}", vendor_dir.join("src").join("anal").display());
-    let full_path =
-        //Path::new("/")
-        // .join("Users")
-        // .join("jeremy")
-        // .join("Documents")
-        // .join("code")
-        Path::new("..")
-        .join("morpheus")
-        .join("src")
-        .join("anal");
-    if !full_path.exists() {
-        panic!("Library path not found at {:?}", full_path);
+    // let full_path =
+    //     //Path::new("/")
+    //     // .join("Users")
+    //     // .join("jeremy")
+    //     // .join("Documents")
+    //     // .join("code")
+    //     Path::new("..")
+    //     .join("morpheus")
+    //     .join("src")
+    //     .join("anal");
+    let lib_path = vendor_dir.join("src").join("anal");
+    if !lib_path.exists() {
+        panic!("Library path not found at {:?}", lib_path);
     }
 
     //requires the lib prefix to link properly
     //fs::copy(full_path.join("anal.a"), full_path.join("libanal.a")).unwrap();
 
-    println!("cargo:rustc-link-search=native={}", full_path.display());
+    println!("cargo:rustc-link-search=native={}", lib_path.display());
     println!("cargo:rustc-link-lib=static=philolog"); // Link against the 'foo' library
 
     // Tell Cargo where to find the library and how to link it
