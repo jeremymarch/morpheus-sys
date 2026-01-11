@@ -12,4 +12,6 @@ You will also want to copy the Morpheus stem library to a location accessible to
 
 Call `morpheus_check("FE/RW", Some("path/to/morpheus/stemlib"))` to analyze the betacode encoded data in the first parameter.  It will return an Option<String> with the result.  You can also leave the second parameter as None and specify the path to the Morpheus stem library using the `MORPHLIB` environment variable.
 
+See the .github workflow for details on how to test and build this crate.  Currently, it has been tested on Linux and MacOS.  For usage, check the unit tests in src/lib.rs.
+
 Future plans include allowing the stemlib to be embedded directly in the binary and optionally converting the input and result to Unicode.
