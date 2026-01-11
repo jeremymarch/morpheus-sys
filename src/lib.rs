@@ -4,15 +4,21 @@ use std::ptr;
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 //include!("../bindings.rs");
 
-pub fn morpheus_check(input: &str) -> Option<String> {
+pub fn morpheus_check(input: &str, morphlib_path: Option<&str>) -> Option<String> {
     let input_c_string = CString::new(input).unwrap();
     let input_ptr = input_c_string.into_raw();
     let flags = 0;
-    let morph_lib_path = ptr::null_mut();
+
+    let morph_lib_path_ptr = if let Some(morphlib_unwrapped) = morphlib_path {
+        let morphlib_c_string = CString::new(morphlib_unwrapped).unwrap();
+        morphlib_c_string.into_raw()
+    } else {
+        ptr::null_mut()
+    };
 
     let result_owned_string;
     unsafe {
-        let result_ptr: *mut c_char = philolog_morph(input_ptr, flags, morph_lib_path);
+        let result_ptr: *mut c_char = philolog_morph(input_ptr, flags, morph_lib_path_ptr);
         if result_ptr.is_null() {
             return None;
         }
@@ -49,7 +55,8 @@ mod tests {
     #[test]
     fn check_word() {
         let my_string = "fe/rw";
-        let res = morpheus_check(my_string);
+        let morphlib_path = None; //or e.g.: Some("morpheus/dist/stemlib");
+        let res = morpheus_check(my_string, morphlib_path);
 
         assert_eq!(
             res.unwrap(),
