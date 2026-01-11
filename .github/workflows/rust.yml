@@ -31,9 +31,13 @@ jobs:
           brew install flex
 
       - name: Build
+        env:
+          MORPHLIB: "morpheus/dist/stemlib"
         run: cargo build --verbose
 
       - name: Run tests
+        env:
+          MORPHLIB: "morpheus/dist/stemlib"
         run: cargo test --verbose
 
   fmt:
