@@ -22,7 +22,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -qq -y build-essential manpages-dev flex
+          sudo apt-get install -qq -y build-essential manpages-dev flex libfl-dev
 
       - name: Install dependencies (macOS)
         if: matrix.os == 'macos-latest'
