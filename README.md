@@ -4,7 +4,7 @@ This crate provides a Rust wrapper around the Morpheus morphology parser/lemmati
 To use include this crate in your project add
 ```
 [dependencies]
-morpheus-sys = "0.1.0"
+morpheus-sys = { git = "https://github.com/jeremymarch/morpheus-sys.git", branch = "main" }
 ```
 to your Cargo.toml file.  
 
