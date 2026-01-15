@@ -122,4 +122,84 @@ mod tests {
             )
         );
     }
+
+    #[test]
+    fn check_word_multiple() {
+        let my_string = "fe/reis a)/gomen";
+        let morphlib_path = None; //or e.g.: Some("morpheus/dist/stemlib");
+        let res = morpheus_check(my_string, morphlib_path);
+
+        assert_eq!(
+            res.unwrap(),
+            String::from(
+                r##"<words>
+<word>
+<form xml:lang="grc-x-beta">fe/reis</form>
+<entry>
+<dict>
+<hdwd xml:lang="grc-x-beta">fe/rw</hdwd>
+<pofs order="1">verb</pofs>
+</dict>
+<infl>
+<term xml:lang="grc-x-beta"><stem>fer</stem><suff>eis</suff></term>
+<pofs order="1">verb</pofs>
+<mood>indicative</mood>
+<num>singular</num>
+<pers>2nd</pers>
+<tense>present</tense>
+<voice>active</voice>
+<stemtype>w_stem</stemtype>
+</infl>
+</entry>
+</word>
+<word>
+<form xml:lang="grc-x-beta">a)/gomen</form>
+<entry>
+<dict>
+<hdwd xml:lang="grc-x-beta">a)/gw</hdwd>
+<pofs order="1">verb</pofs>
+</dict>
+<infl>
+<term xml:lang="grc-x-beta"><stem>a)g</stem><suff>omen</suff></term>
+<pofs order="1">verb</pofs>
+<mood>indicative</mood>
+<num>plural</num>
+<pers>1st</pers>
+<tense>imperfect</tense>
+<voice>active</voice>
+<dial>Doric Aeolic</dial>
+<stemtype>w_stem</stemtype>
+<derivtype>reg_conj</derivtype>
+</infl>
+<infl>
+<term xml:lang="grc-x-beta"><stem>a)g</stem><suff>omen</suff></term>
+<pofs order="1">verb</pofs>
+<mood>indicative</mood>
+<num>plural</num>
+<pers>1st</pers>
+<tense>present</tense>
+<voice>active</voice>
+<stemtype>w_stem</stemtype>
+<derivtype>reg_conj</derivtype>
+</infl>
+<infl>
+<term xml:lang="grc-x-beta"><stem>a)g</stem><suff>omen</suff></term>
+<pofs order="1">verb</pofs>
+<mood>indicative</mood>
+<num>plural</num>
+<pers>1st</pers>
+<tense>imperfect</tense>
+<voice>active</voice>
+<dial>Homeric Ionic</dial>
+<stemtype>w_stem</stemtype>
+<derivtype>reg_conj</derivtype>
+<morph>unaugmented</morph>
+</infl>
+</entry>
+</word>
+</words>
+"##
+            )
+        );
+    }
 }
