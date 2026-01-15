@@ -61,7 +61,8 @@ mod tests {
         assert_eq!(
             res.unwrap(),
             String::from(
-                r##"<word>
+                r##"<words>
+<word>
 <form xml:lang="grc-x-beta">fe/rw</form>
 <entry>
 <dict>
@@ -90,6 +91,32 @@ mod tests {
 </infl>
 </entry>
 </word>
+</words>
+"##
+            )
+        );
+    }
+
+    #[test]
+    fn check_word_empty() {
+        let my_string = "";
+        let morphlib_path = None; //or e.g.: Some("morpheus/dist/stemlib");
+        let res = morpheus_check(my_string, morphlib_path);
+
+        assert_eq!(res, None);
+    }
+
+    #[test]
+    fn check_word_invalid() {
+        let my_string = "xx";
+        let morphlib_path = None; //or e.g.: Some("morpheus/dist/stemlib");
+        let res = morpheus_check(my_string, morphlib_path);
+
+        assert_eq!(
+            res.unwrap(),
+            String::from(
+                r##"<words>
+<unknown xml:lang="grc-x-beta">xx</unknown>
 </words>
 "##
             )
